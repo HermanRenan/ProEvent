@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using projectFullS.Models;
+using projectFullS.Data;
 
 namespace projectFullS.Controllers
 {
@@ -13,45 +14,42 @@ namespace projectFullS.Controllers
     public class EventsController : ControllerBase
     {    
 
-            public IEnumerable<Event> _event = new Event[]
-            {   
-                new Event(){
-                EventId = 1,
-                QtdPessoas= 2,
-                Local="BH",
-                DataEvent= DateTime.Now.AddDays(2).ToString(),
-                Lote= "1º Lote"
-                },
-                new Event(){
-                EventId = 2,
-                QtdPessoas= 212,
-                Local="SP",
-                DataEvent= DateTime.Now.AddDays(2).ToString(),
-                Lote= "2º Lote"
-                },
-            };
+    
+        public readonly DataContext _context;
 
-        public EventsController()
+        public EventsController(DataContext context)
         {
-            
+            _context  = context;
         }
 
         [HttpGet]
         public IEnumerable<Event> Get()
         {
-            return _event;     
+            return _context.Events;
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<Event> Get(int id)
+        public Event Get(int id)
         {
-            return _event.Where(x=> x.EventId == id);     
+            return _context.Events.FirstOrDefault(x=> x.EventId == id);     
         }
 
         [HttpPost]
         public string Post()
         {
             return "post";
+        }
+
+        [HttpPut]
+        public string Put()
+        {
+            return "put";
+        }
+
+        [HttpDelete]
+        public string Delete())
+        {
+            return "delete";
         }
     }
 }
